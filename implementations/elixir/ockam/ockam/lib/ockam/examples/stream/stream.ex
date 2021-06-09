@@ -53,7 +53,7 @@ defmodule Ockam.Examples.Stream do
         index_route: index_route,
         stream_name: stream_name,
         message_handler: fn data ->
-          Ockam.Router.route(%{
+          Ockam.Router.route(%Ockam.Message{
             onward_route: [receiver_address],
             return_route: [],
             payload: Ockam.Protocol.encode_payload(Ockam.Protocol.Binary, :request, data)
@@ -106,7 +106,7 @@ defmodule Ockam.Examples.Stream do
   def route_message(message, name_prefix \\ "") do
     payload = Ockam.Protocol.encode_payload(Ockam.Protocol.Binary, :request, message)
 
-    Ockam.Router.route(%{
+    Ockam.Router.route(%Ockam.Message{
       onward_route: [name_prefix <> "publisher"],
       return_route: [],
       payload: payload
@@ -142,7 +142,7 @@ defmodule Ockam.Examples.Stream.Receiver do
   end
 
   @impl true
-  def handle_message(%{payload: payload}, state) do
+  def handle_message(%Ockam.Message{payload: payload}, state) do
     case decode_payload(payload) do
       {:ok, Ockam.Protocol.Binary, data} ->
         Logger.info("Received a message: #{inspect(data)}")

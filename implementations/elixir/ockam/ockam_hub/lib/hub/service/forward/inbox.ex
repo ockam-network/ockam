@@ -22,7 +22,7 @@ defmodule Ockam.Hub.Service.Forward.Inbox do
   def handle_message(message, state) do
     return_route = Message.return_route(message)
 
-    forward = %{
+    forward = %Ockam.Message{
       onward_route: state.forward_route,
       return_route: [state.outbox_address | return_route],
       payload: Message.payload(message)

@@ -72,7 +72,7 @@ defmodule Ockam.Stream.Client.Consumer do
   end
 
   @impl true
-  def handle_message(%{payload: payload} = message, state) do
+  def handle_message(%Ockam.Message{payload: payload} = message, state) do
     case decode_payload(payload) do
       {:ok, StreamProtocol.Create, %{stream_name: stream_name}} ->
         state = add_stream(state, stream_name, Message.return_route(message))
@@ -118,9 +118,9 @@ defmodule Ockam.Stream.Client.Consumer do
   end
 
   ## TODO: rework the worker to do handle_info
-  def handle_message(:consume, state) do
+  def handle_info(:consume, state) do
     request_messages(state)
-    {:ok, state}
+    {:noreply, state}
   end
 
   @impl true
@@ -239,7 +239,7 @@ defmodule Ockam.Stream.Client.Consumer do
   end
 
   def route(payload, route, state) do
-    Ockam.Router.route(%{
+    Ockam.Router.route(%Ockam.Message{
       onward_route: route,
       return_route: [Map.get(state, :address)],
       payload: payload

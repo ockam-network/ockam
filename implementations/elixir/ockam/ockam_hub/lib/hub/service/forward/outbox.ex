@@ -21,7 +21,7 @@ defmodule Ockam.Hub.Service.Forward.Outbox do
     return = [state.inbox_address | Message.return_route(message)]
     payload = Message.payload(message)
 
-    forward = %{onward_route: onward, return_route: return, payload: payload}
+    forward = %Ockam.Message{onward_route: onward, return_route: return, payload: payload}
 
     with :ok <- Router.route(forward) do
       {:ok, state}

@@ -32,7 +32,7 @@ defmodule Ockam.Stream.Index.Worker do
   end
 
   @impl true
-  def handle_message(%{payload: payload} = message, state) do
+  def handle_message(%Ockam.Message{payload: payload} = message, state) do
     case decode_payload(payload) do
       {:ok, protocol, {:save, data}}
       when protocol == @protocol or protocol == @partitioned_protocol ->
@@ -98,7 +98,7 @@ defmodule Ockam.Stream.Index.Worker do
   end
 
   def reply_index(protocol, client_id, stream_name, partition, index, return_route, state) do
-    Ockam.Router.route(%{
+    Ockam.Router.route(%Ockam.Message{
       onward_route: return_route,
       return_route: [state.address],
       payload:

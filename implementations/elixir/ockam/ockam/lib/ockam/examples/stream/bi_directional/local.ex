@@ -87,7 +87,7 @@ defmodule Ockam.Example.Stream.BiDirectional.Local do
   end
 
   def send_message(onward_route) do
-    msg = %{
+    msg = %Ockam.Message{
       onward_route: onward_route,
       return_route: ["ping"],
       payload: "0"

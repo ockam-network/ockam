@@ -18,7 +18,7 @@ defmodule Ockam.Example.Stream.Ping do
 
     :timer.sleep(20)
 
-    reply = %{
+    reply = %Ockam.Message{
       onward_route: Message.return_route(message),
       return_route: [state.address],
       payload: "#{next}"
@@ -43,7 +43,7 @@ defmodule Ockam.Example.Stream.Pong do
 
   @impl true
   def handle_message(message, state) do
-    reply = %{
+    reply = %Ockam.Message{
       onward_route: Message.return_route(message),
       return_route: [state.address],
       payload: Message.payload(message)

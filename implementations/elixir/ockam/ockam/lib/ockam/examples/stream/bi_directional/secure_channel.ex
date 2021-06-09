@@ -35,13 +35,13 @@ defmodule Ockam.Example.Stream.BiDirectional.SecureChannel do
 
   require Logger
 
-  def config(n) do
+  def config(_n) do
     %{
-      hub_ip: "13.64.73.230",
-      # hub_ip: "127.0.0.1",
+      # hub_ip: "13.64.73.230",
+      hub_ip: "127.0.0.1",
       hub_port: 4000,
-      service_address: "stream_demo#{n}_service",
-      index_address: "stream_demo#{n}_index"
+      service_address: "stream_service",
+      index_address: "stream_index_service"
     }
   end
 
@@ -129,7 +129,7 @@ defmodule Ockam.Example.Stream.BiDirectional.SecureChannel do
   end
 
   def send_message(onward_route, return_route, payload) do
-    msg = %{
+    msg = %Ockam.Message{
       onward_route: onward_route,
       return_route: return_route,
       payload: payload

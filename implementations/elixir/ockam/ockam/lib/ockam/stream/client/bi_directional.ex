@@ -42,6 +42,7 @@ defmodule Ockam.Stream.Client.BiDirectional do
   Creates a return stream publisher id it doesn't exist
   Routes the message locally with return publisher address in return route
   """
+  ## TODO: batter name to not collide with Ockam.Worker.handle_message
   def handle_message(data, consumer_stream, subscription_id, stream_options) do
     {:ok, %{return_stream: publisher_stream, message: message}} = decode_message(data)
 

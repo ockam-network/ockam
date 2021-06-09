@@ -9,7 +9,7 @@ defmodule Ockam.Wire.Binary.V2.Tests do
     test "encode/1 for TCP" do
       {a, b, c, d} = {127, 0, 0, 1}
 
-      message = %{
+      message = %Ockam.Message{
         onward_route: [
           %TCPAddress{ip: {a, b, c, d}, port: 4000},
           "printer"
@@ -36,7 +36,7 @@ defmodule Ockam.Wire.Binary.V2.Tests do
     test "encode/1 for UDP" do
       {a, b, c, d} = {127, 0, 0, 1}
 
-      message = %{
+      message = %Ockam.Message{
         onward_route: [
           %UDPAddress{ip: {a, b, c, d}, port: 4000},
           "printer"
@@ -55,7 +55,7 @@ defmodule Ockam.Wire.Binary.V2.Tests do
     test "encode/1 for TCP (minimal)" do
       {a, b, c, d} = {127, 0, 0, 1}
 
-      message = %{
+      message = %Ockam.Message{
         onward_route: [
           %TCPAddress{ip: {a, b, c, d}, port: 4000}
         ],
@@ -73,7 +73,7 @@ defmodule Ockam.Wire.Binary.V2.Tests do
     test "encode/1 for UDP (minimal)" do
       {a, b, c, d} = {127, 0, 0, 1}
 
-      message = %{
+      message = %Ockam.Message{
         onward_route: [
           %UDPAddress{ip: {a, b, c, d}, port: 4000}
         ],

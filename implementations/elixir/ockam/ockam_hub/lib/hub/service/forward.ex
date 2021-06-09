@@ -24,11 +24,7 @@ defmodule Ockam.Hub.Service.Forward do
   end
 
   def send_reply(inbox_address, message) do
-    reply = %{
-      onward_route: Message.return_route(message),
-      return_route: [inbox_address],
-      payload: Message.payload(message)
-    }
+    reply = Message.reply(message, inbox_address, Message.payload(message))
 
     Logger.info("REPLY: #{inspect(reply)}")
     Router.route(reply)

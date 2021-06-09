@@ -50,10 +50,13 @@ defmodule Ockam.Transport.UDP.Listener do
   @doc false
   @impl true
 
-  def handle_message({:udp, _socket, _from_ip, _from_port, _packet} = udp_message, state) do
+  def handle_info({:udp, _socket, _from_ip, _from_port, _packet} = udp_message, state) do
+    ## TODO: error handling
     decode_and_send_to_router(udp_message, state)
+    {:noreply, state}
   end
 
+  @impl true
   def handle_message(message, state) do
     encode_and_send_over_udp(message, state)
   end
@@ -85,7 +88,7 @@ defmodule Ockam.Transport.UDP.Listener do
   end
 
   defp create_outgoing_message(message) do
-    %{
+    %Ockam.Message{
       onward_route: Message.onward_route(message),
       return_route: Message.return_route(message),
       payload: Message.payload(message)
@@ -114,7 +117,7 @@ defmodule Ockam.Transport.UDP.Listener do
     end
   end
 
-  defp set_return_route(%{return_route: return_route} = message, address) do
+  defp set_return_route(%Ockam.Message{return_route: return_route} = message, address) do
     {:ok, %{message | return_route: [address | return_route]}}
   end
 

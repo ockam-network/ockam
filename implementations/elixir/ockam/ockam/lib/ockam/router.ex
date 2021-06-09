@@ -22,7 +22,7 @@ defmodule Ockam.Router do
   """
   @spec route(Message.t()) :: :ok | {:error, reason :: any()}
 
-  def route(message) do
+  def route(%Ockam.Message{} = message) do
     metadata = %{message: message}
     start_time = Telemetry.emit_start_event([__MODULE__, :route], metadata: metadata)
 
@@ -32,6 +32,10 @@ defmodule Ockam.Router do
     Telemetry.emit_stop_event([__MODULE__, :route], start_time, metadata: metadata)
 
     return_value
+  end
+
+  def route(message) do
+    raise "Mesage needs to be Ockam.Message to be routed: #{inspect(message)}"
   end
 
   defp pick_and_invoke_handler(message) do

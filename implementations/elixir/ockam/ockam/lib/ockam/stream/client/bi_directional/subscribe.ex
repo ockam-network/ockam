@@ -86,7 +86,7 @@ defmodule Ockam.Stream.Client.BiDirectional.Subscribe do
             Map.fetch!(state, :stream_options)
           )
 
-        Ockam.Router.route(%{
+        Ockam.Router.route(%Ockam.Message{
           onward_route: Message.return_route(message),
           return_route: [address],
           payload: "irrelevant"

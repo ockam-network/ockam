@@ -21,7 +21,7 @@ defmodule Ockam.Router.Tests.Echo do
 
   @impl true
   def handle_message(message, state) do
-    reply = %{
+    reply = %Ockam.Message{
       onward_route: Message.return_route(message),
       return_route: [state.address],
       payload: Message.payload(message)
@@ -54,7 +54,7 @@ defmodule Ockam.Router.Tests.Forwarder do
         {:ok, state}
 
       [^address | rest] ->
-        forward = %{
+        forward = %Ockam.Message{
           onward_route: rest,
           return_route: [address | Message.return_route(message)],
           payload: Message.payload(message)
@@ -90,7 +90,7 @@ defmodule Ockam.Router.Tests.PingPong do
           "ping " <> next
       end
 
-    reply = %{
+    reply = %Ockam.Message{
       onward_route: Message.return_route(message),
       return_route: [state.address],
       payload: response_payload
@@ -137,7 +137,7 @@ defmodule Ockam.Router.Tests do
 
   describe "Ockam.Router" do
     test "Simple UDP Test", %{printer_pid: printer} do
-      message = %{
+      message = %Ockam.Message{
         onward_route: [
           %UDPAddress{ip: {127, 0, 0, 1}, port: 4000},
           "printer"
@@ -155,8 +155,7 @@ defmodule Ockam.Router.Tests do
 
       assert_receive({:trace, ^printer, :receive, result}, 1_000)
 
-      assert result == %{
-               version: 1,
+      assert result == %Ockam.Message{
                onward_route: ["printer"],
                payload: "hello",
                return_route: [
@@ -166,7 +165,7 @@ defmodule Ockam.Router.Tests do
     end
 
     test "Simple TCP Test", %{printer_pid: printer} do
-      message = %{
+      message = %Ockam.Message{
         onward_route: [
           %TCPAddress{ip: {127, 0, 0, 1}, port: 4000},
           "printer"
@@ -185,8 +184,7 @@ defmodule Ockam.Router.Tests do
 
       assert_receive({:trace, ^printer, :receive, result}, 1_000)
 
-      assert %{
-               version: 1,
+      assert %Ockam.Message{
                onward_route: ["printer"],
                payload: "hello",
                return_route: [_address]
@@ -205,7 +203,7 @@ defmodule Ockam.Router.Tests do
       end)
 
       # client
-      request = %{
+      request = %Ockam.Message{
         onward_route: [
           "client_forwarder",
           %TCPAddress{ip: {127, 0, 0, 1}, port: 5000},
@@ -303,7 +301,7 @@ defmodule Ockam.Router.Tests do
       end)
 
       ## Initial request
-      request = %{
+      request = %Ockam.Message{
         onward_route: [
           %TCPAddress{ip: {127, 0, 0, 1}, port: 5001},
           "ping_pong_server"

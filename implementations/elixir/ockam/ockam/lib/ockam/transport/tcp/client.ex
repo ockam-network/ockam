@@ -22,7 +22,7 @@ defmodule Ockam.Transport.TCP.Client do
   end
 
   @impl true
-  def handle_message(:connect, %{ip: ip, port: port} = state) do
+  def handle_info(:connect, %{ip: ip, port: port} = state) do
     {:ok, socket} = :gen_tcp.connect(ip, port, [:binary, :inet, {:packet, 2}])
     :inet.setopts(socket, [{:active, true}, {:packet, 2}])
     :gen_tcp.controlling_process(socket, self())
@@ -30,7 +30,7 @@ defmodule Ockam.Transport.TCP.Client do
     {:noreply, Map.put(state, :socket, socket)}
   end
 
-  def handle_message({:tcp, socket, data}, %{socket: socket} = state) do
+  def handle_info({:tcp, socket, data}, %{socket: socket} = state) do
     with {:ok, message} <- Wire.decode(@wire_encoder_decoder, data),
          {:ok, message} <- update_return_route(message, state) do
       Ockam.Router.route(message)
@@ -42,10 +42,11 @@ defmodule Ockam.Transport.TCP.Client do
     {:noreply, state}
   end
 
-  def handle_message({:tcp_closed, _}, state), do: {:stop, :normal, state}
-  def handle_message({:tcp_error, _}, state), do: {:stop, :normal, state}
+  def handle_info({:tcp_closed, _}, state), do: {:stop, :normal, state}
+  def handle_info({:tcp_error, _}, state), do: {:stop, :normal, state}
 
   ## TODO: implement Worker API
+  @impl true
   def handle_message(%{payload: _payload} = message, state) do
     encode_and_send_over_tcp(message, state)
     {:noreply, state}

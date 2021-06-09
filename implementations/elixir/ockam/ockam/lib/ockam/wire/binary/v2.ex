@@ -41,7 +41,7 @@ defmodule Ockam.Wire.Binary.V2 do
   @spec encode(message :: Message.t()) ::
           {:ok, encoded :: iodata} | {:error, error :: EncodeError.t()}
 
-  def encode(message) do
+  def encode(%Ockam.Message{} = message) do
     onward_route = Message.onward_route(message)
     return_route = Message.return_route(message)
     payload = Message.payload(message)
@@ -77,7 +77,9 @@ defmodule Ockam.Wire.Binary.V2 do
          {:ok, decoded_onward_route} <- Route.decode(onward_route),
          {:ok, decoded_return_route} <- Route.decode(return_route) do
       {:ok,
-       Map.merge(decoded, %{
+       Ockam.Message
+       |> struct(decoded)
+       |> struct(%{
          onward_route: decoded_onward_route,
          return_route: decoded_return_route
        })}

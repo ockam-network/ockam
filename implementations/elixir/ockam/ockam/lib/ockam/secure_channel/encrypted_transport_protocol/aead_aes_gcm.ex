@@ -10,6 +10,7 @@ defmodule Ockam.SecureChannel.EncryptedTransportProtocol.AeadAesGcm do
     {:ok, initial_state, data}
   end
 
+  ## TODO: batter name to not collide with Ockam.Worker.handle_message
   def handle_message(message, {:encrypted_transport, :ready} = state, data) do
     first_address = message |> Message.onward_route() |> List.first()
 
@@ -26,7 +27,7 @@ defmodule Ockam.SecureChannel.EncryptedTransportProtocol.AeadAesGcm do
   end
 
   defp encrypt_and_send_to_peer(message, state, data) do
-    message = %{
+    message = %Ockam.Message{
       payload: Message.payload(message),
       onward_route: Message.onward_route(message) |> List.pop_at(0) |> elem(1),
       return_route: Message.return_route(message)
@@ -34,7 +35,7 @@ defmodule Ockam.SecureChannel.EncryptedTransportProtocol.AeadAesGcm do
 
     with {:ok, encoded} <- Wire.encode(message),
          {:ok, encrypted, data} <- encrypt(encoded, data) do
-      envelope = %{
+      envelope = %Ockam.Message{
         payload: encrypted,
         onward_route: data.peer.route,
         return_route: [data.ciphertext_address]
@@ -60,7 +61,7 @@ defmodule Ockam.SecureChannel.EncryptedTransportProtocol.AeadAesGcm do
 
     with {:ok, decrypted, data} <- decrypt(payload, data),
          {:ok, decoded} <- Wire.decode(decrypted) do
-      message = %{
+      message = %Ockam.Message{
         payload: Message.payload(decoded),
         onward_route: Message.onward_route(decoded),
         return_route:

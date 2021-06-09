@@ -48,7 +48,7 @@ defmodule Ockam.Node do
   @doc """
   Send a message to the process registered with an address.
   """
-  def send(address, message) do
+  def send(address, %Ockam.Message{} = message) do
     case Registry.whereis_name(address) do
       # dead letters
       :undefined -> :ok
@@ -123,7 +123,7 @@ defmodule Ockam.Node do
     end
   end
 
-  def handle_routed_message(message) do
+  def handle_routed_message(%Ockam.Message{} = message) do
     metadata = %{message: message}
 
     start_time =
@@ -138,7 +138,7 @@ defmodule Ockam.Node do
     return_value
   end
 
-  def route_message(message) do
+  defp route_message(message) do
     onward_route = Message.onward_route(message)
 
     case onward_route do
@@ -155,7 +155,7 @@ defmodule Ockam.Node do
 
     case payload do
       @ping ->
-        reply = %{payload: @pong, onward_route: return_route}
+        reply = %Ockam.Message{payload: @pong, onward_route: return_route}
         Router.route(reply)
 
       unexpected_payload ->

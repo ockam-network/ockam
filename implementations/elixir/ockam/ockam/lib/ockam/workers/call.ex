@@ -23,7 +23,7 @@ defmodule Ockam.Workers.Call do
   end
 
   def send_call(call, state) do
-    Ockam.Router.route(%{
+    Ockam.Router.route(%Ockam.Message{
       payload: Message.payload(call),
       onward_route: Message.onward_route(call),
       return_route: [state.address]

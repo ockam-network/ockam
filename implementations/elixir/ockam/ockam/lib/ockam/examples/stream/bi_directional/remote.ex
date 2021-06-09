@@ -87,7 +87,7 @@ defmodule Ockam.Example.Stream.BiDirectional.Remote do
 
     # Call subscribe service to get remote publisher
     reply =
-      Call.call(%{
+      Call.call(%Ockam.Message{
         onward_route: [@hub_tcp, "stream_subscribe"],
         payload:
           Ockam.Protocol.encode_payload(
@@ -109,7 +109,7 @@ defmodule Ockam.Example.Stream.BiDirectional.Remote do
   end
 
   def send_message(route) do
-    msg = %{
+    msg = %Ockam.Message{
       onward_route: route,
       return_route: ["ping"],
       payload: "0"
@@ -122,7 +122,7 @@ defmodule Ockam.Example.Stream.BiDirectional.Remote do
   def subscribe(stream) do
     ## Remote subscribe
 
-    subscribe_msg = %{
+    subscribe_msg = %Ockam.Message{
       onward_route: [@hub_tcp, "stream_subscribe"],
       return_route: [],
       payload:
@@ -144,7 +144,7 @@ defmodule Ockam.Example.Stream.BiDirectional.Remote do
   def register_alias(address) do
     reply =
       Call.call(
-        %{
+        %Ockam.Message{
           onward_route: [@hub_tcp, "forwarding_service"],
           payload: "register"
         },
