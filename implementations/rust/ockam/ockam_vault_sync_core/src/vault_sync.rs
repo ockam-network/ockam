@@ -36,8 +36,7 @@ impl VaultSync {
 
     pub(crate) async fn receive_message(&mut self) -> Result<VaultResponseMessage> {
         self.ctx
-            .receive::<ResultMessage<VaultResponseMessage>>()
-            .await?
+            .receive::<ResultMessage<VaultResponseMessage>>()?
             .take()
             .body()
             .into()
