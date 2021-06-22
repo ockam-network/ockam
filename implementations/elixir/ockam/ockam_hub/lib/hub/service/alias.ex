@@ -16,6 +16,8 @@ defmodule Ockam.Hub.Service.Alias do
 
   require Logger
 
+  @forwarder_address_prefix "FWD_"
+
   @impl true
   def handle_message(message, state) do
     Logger.info("ALIAS service\nMESSAGE: #{inspect(message)}")
@@ -25,7 +27,8 @@ defmodule Ockam.Hub.Service.Alias do
     {:ok, _alias_address} =
       __MODULE__.Forwarder.create(
         forward_route: forward_route,
-        registration_payload: payload
+        registration_payload: payload,
+        address_prefix: @forwarder_address_prefix
       )
 
     {:ok, state}

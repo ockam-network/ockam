@@ -40,7 +40,12 @@ defmodule Ockam.Worker do
 
       @doc false
       def create(options) when is_list(options) do
-        options = Keyword.put_new_lazy(options, :address, &Node.get_random_unregistered_address/0)
+        address_prefix = Keyword.get(options, :address_prefix, "")
+
+        options =
+          Keyword.put_new_lazy(options, :address, fn ->
+            Node.get_random_unregistered_address(address_prefix)
+          end)
 
         case Node.start_supervised(__MODULE__, options) do
           {:ok, pid, worker} ->

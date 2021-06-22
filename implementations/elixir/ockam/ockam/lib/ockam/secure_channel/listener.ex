@@ -6,6 +6,8 @@ defmodule Ockam.SecureChannel.Listener do
   alias Ockam.Message
   alias Ockam.SecureChannel.Channel
 
+  @channel_address_prefix "SC_"
+
   @doc false
   @impl true
   def setup(options, state) do
@@ -28,6 +30,7 @@ defmodule Ockam.SecureChannel.Listener do
       [role: :responder]
       |> Keyword.put(:vault, state.vault)
       |> Keyword.put(:identity_keypair, state.identity_keypair)
+      |> Keyword.put(:address_prefix, @channel_address_prefix)
 
     with {:ok, channel_options} <- update_routes(message, channel_options),
          {:ok, _address} <- Channel.create(channel_options) do

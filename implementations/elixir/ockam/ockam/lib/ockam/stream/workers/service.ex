@@ -17,6 +17,8 @@ defmodule Ockam.Stream.Workers.Service do
 
   @default_storage Ockam.Stream.Storage.Internal
 
+  @stream_worker_prefix "ST_W_"
+
   @protocol_mapping Ockam.Protocol.Mapping.mapping([
                       {:server, StreamProtocol.Create},
                       {:server, StreamProtocol.Partitioned.Create},
@@ -138,7 +140,8 @@ defmodule Ockam.Stream.Workers.Service do
           [
             reply_route: return_route,
             stream_name: name,
-            partition: partition
+            partition: partition,
+            address_prefix: @stream_worker_prefix
           ]
       )
 

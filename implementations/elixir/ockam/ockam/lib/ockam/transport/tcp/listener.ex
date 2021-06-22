@@ -12,6 +12,8 @@ if Code.ensure_loaded?(:ranch) do
 
     @tcp 1
 
+    @tcp_client_address_prefix "TCPC_"
+
     @doc false
     @impl true
     def setup(options, state) do
@@ -70,7 +72,9 @@ if Code.ensure_loaded?(:ranch) do
             Map.put(create_outgoing_message(message), :onward_route, onward_route)
 
           ## TODO: do we want to pass a configured address?
-          {:ok, client_address} = Client.create(destination: destination)
+          {:ok, client_address} =
+            Client.create(destination: destination, address_prefix: @tcp_client_address_prefix)
+
           Ockam.Node.send(client_address, message_to_forward)
 
         e ->
@@ -135,6 +139,9 @@ if Code.ensure_loaded?(:ranch) do
 
     require Logger
 
+    ## TODO: maybe pass this from the listener
+    @tcp_handler_address_prefix "TCPH_"
+
     @wire_encoder_decoder Ockam.Wire.Binary.V2
 
     def start_link(ref, _socket, transport, opts) do
@@ -151,7 +158,7 @@ if Code.ensure_loaded?(:ranch) do
       {:ok, socket} = :ranch.handshake(ref, opts)
       :ok = :inet.setopts(socket, [{:active, true}, {:packet, 2}, {:nodelay, true}])
 
-      address = Ockam.Node.get_random_unregistered_address()
+      address = Ockam.Node.get_random_unregistered_address(@tcp_handler_address_prefix)
 
       Ockam.Node.Registry.register_name(address, self())
 

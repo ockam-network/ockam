@@ -50,6 +50,11 @@ defmodule Ockam.Node do
   defdelegate unregister_address(address), to: Registry, as: :unregister_name
 
   @doc """
+  Lists all registered addresses
+  """
+  defdelegate list_addresses(), to: Registry, as: :list_names
+
+  @doc """
   Send a message to the process registered with an address.
   """
   def send(address, message) do
@@ -63,12 +68,16 @@ defmodule Ockam.Node do
   @doc """
   Returns a random address that is currently not registed on the node.
   """
-  def get_random_unregistered_address(length_in_bytes \\ @default_address_length_in_bytes) do
-    candidate = length_in_bytes |> :crypto.strong_rand_bytes() |> Base.encode16(case: :lower)
+  def get_random_unregistered_address(
+        prefix \\ "",
+        length_in_bytes \\ @default_address_length_in_bytes
+      ) do
+    random = length_in_bytes |> :crypto.strong_rand_bytes() |> Base.encode16(case: :lower)
+    candidate = prefix <> random
 
     case whereis(candidate) do
       nil -> candidate
-      _pid -> get_random_unregistered_address(length_in_bytes)
+      _pid -> get_random_unregistered_address(prefix, length_in_bytes)
     end
   end
 
