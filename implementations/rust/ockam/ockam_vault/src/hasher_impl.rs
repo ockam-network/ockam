@@ -6,6 +6,7 @@ use ockam_vault_core::{
     AES256_SECRET_LENGTH,
 };
 use sha2::{Digest, Sha256};
+use ockam_core::compat::vec::Vec;
 
 impl Hasher for SoftwareVault {
     fn sha256(&mut self, data: &[u8]) -> ockam_core::Result<[u8; 32]> {

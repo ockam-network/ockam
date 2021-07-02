@@ -4,7 +4,10 @@ use crate::{
 };
 use ockam_core::{Address, Result, Route};
 use ockam_node::Context;
+#[cfg(feature = "std")]
 use rand::random;
+#[cfg(feature = "no_std")]
+use ockam_core::compat::rand::random;
 use serde::{Deserialize, Serialize};
 use tracing::{debug, info};
 

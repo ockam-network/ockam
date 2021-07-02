@@ -1,7 +1,7 @@
 use crate::{error::Error, relay::RelayMessage, NodeMessage, NodeReply, NodeReplyResult};
 use ockam_core::{Address, AddressSet, Result};
-use std::{collections::BTreeMap, sync::Arc};
-use tokio::sync::mpsc::{channel, Receiver, Sender};
+use ockam_core::compat::{collections::BTreeMap, sync::Arc};
+use crate::tokio::sync::mpsc::{channel, Receiver, Sender};
 
 type RelaySender = Arc<Sender<RelayMessage>>;
 
@@ -133,9 +133,12 @@ impl Router {
     ) -> Result<()> {
         trace!("Starting new worker '{}'", addrs.first());
 
+        #[cfg(feature = "std")]
         if std::env::var("OCKAM_DUMP_INTERNALS").is_ok() {
             trace!("{:#?}", self.internal);
         }
+        #[cfg(feature = "dump_internals")]
+        trace!("{:#?}", self.internal);
 
         let sender = Arc::new(sender);
         addrs.iter().for_each(|addr| {
@@ -184,7 +187,7 @@ impl Router {
         reply: &Sender<NodeReplyResult>,
         wrap: bool,
     ) -> Result<()> {
-        trace!("Resolvivg worker address '{}'", addr);
+        trace!("Resolving worker address '{}'", addr);
 
         match self.internal.get(addr) {
             Some(sender) => reply.send(NodeReply::sender(

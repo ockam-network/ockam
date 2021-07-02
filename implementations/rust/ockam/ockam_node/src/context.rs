@@ -1,9 +1,9 @@
-use std::{sync::Arc, time::Duration};
-
+use core::time::Duration;
+use ockam_core::compat::{sync::Arc, vec::Vec};
 use ockam_core::{
     Address, AddressSet, LocalMessage, Message, Result, Route, TransportMessage, Worker,
 };
-use tokio::{
+use crate::tokio::{
     runtime::Runtime,
     sync::mpsc::{channel, Sender},
     time::timeout,

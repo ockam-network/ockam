@@ -17,17 +17,16 @@ pub const AES256_SECRET_LENGTH: usize = 32;
 pub const AES128_SECRET_LENGTH: usize = 16;
 
 cfg_if! {
-    if #[cfg(feature = "no_std")] {
-        use heapless::consts::*;
+    if #[cfg(all(feature = "no_std", not(feature = "alloc")))] {
         /// Secret Key Vector
-        pub type SecretKeyVec = heapless::Vec<u8, U32>;
+        pub type SecretKeyVec = heapless::Vec<u8, 32>;
         /// Public Key Vector
-        pub type PublicKeyVec = heapless::Vec<u8, U65>;
+        pub type PublicKeyVec = heapless::Vec<u8, 65>;
         /// Bufer for small vectors (e.g. array of attributes). Max size - 4
-        pub type SmallBuffer<T> = heapless::Vec<T, U4>;
+        pub type SmallBuffer<T> = heapless::Vec<T, 4>;
         /// Buffer for large binaries (e.g. encrypted data). Max size - 512
-        pub type Buffer<T> = heapless::Vec<T, U512>;
-        pub type KeyId = heapless::String<U64>;
+        pub type Buffer<T> = heapless::Vec<T, 512>;
+        pub type KeyId = heapless::String<64>;
 
         impl From<&str> for KeyId {
             fn from(s: &str) -> Self {

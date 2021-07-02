@@ -2,15 +2,16 @@ use crate::vault_types::{FfiSecretAttributes, SecretKeyHandle};
 use crate::{check_buffer, FfiError, FfiObjectMutexStorage, FfiOckamError};
 use crate::{FfiVaultFatPointer, FfiVaultType};
 use lazy_static::lazy_static;
-use ockam_core::lib::convert::{TryFrom, TryInto};
-use ockam_core::lib::slice;
+use core::convert::{TryFrom, TryInto};
+use core::slice;
 use ockam_vault::SoftwareVault;
 use ockam_vault_core::{
     AsymmetricVault, Hasher, PublicKey, Secret, SecretAttributes, SecretType, SecretVault,
     SymmetricVault,
 };
-use std::ops::DerefMut;
-use std::sync::{Arc, Mutex};
+use core::ops::DerefMut;
+use ockam_core::compat::sync::{Arc, Mutex};
+
 
 /// FFI Vault trait. See documentation for individual sub-traits for details.
 pub trait FfiVault: SecretVault + Hasher + SymmetricVault + AsymmetricVault + Send {}

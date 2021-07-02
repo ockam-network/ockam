@@ -2,6 +2,7 @@ use crate::{VaultRequestMessage, VaultResponseMessage, VaultSync, VaultSyncCoreE
 use ockam_core::Result;
 use ockam_node::block_future;
 use ockam_vault_core::{KeyId, KeyIdVault, PublicKey, Secret};
+use ockam_core::compat::string::ToString;
 
 impl KeyIdVault for VaultSync {
     fn get_secret_by_key_id(&mut self, key_id: &str) -> Result<Secret> {

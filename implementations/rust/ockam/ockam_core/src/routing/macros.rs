@@ -23,7 +23,7 @@ macro_rules! route {
 #[cfg(test)]
 mod tests {
     use crate::Address;
-    use rand::random;
+    use crate::compat::rand::random;
 
     #[test]
     fn test1() {
@@ -32,7 +32,7 @@ mod tests {
 
     #[test]
     fn test2() {
-        use crate::std::string::ToString;
+        use crate::compat::string::ToString;
         let address: Address = random();
         let _route = route!["str", "STR2", "STR3".to_string(), address];
     }

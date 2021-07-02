@@ -4,7 +4,7 @@ use ockam_node::Context;
 use ockam_vault_core::{
     AsymmetricVault, Hasher, KeyIdVault, SecretVault, Signer, SymmetricVault, Verifier,
 };
-use rand::random;
+use ockam_core::compat::{rand::random, boxed::Box};
 use zeroize::Zeroize;
 
 /// Super-trait of traits required for a Vault Worker.

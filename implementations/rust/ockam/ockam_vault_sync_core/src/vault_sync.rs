@@ -1,7 +1,10 @@
 use crate::{Vault, VaultRequestMessage, VaultResponseMessage, VaultTrait};
 use ockam_core::{Address, Result, ResultMessage, Route};
 use ockam_node::{block_future, Context};
+#[cfg(feature = "std")]
 use rand::random;
+#[cfg(feature = "no_std")]
+use ockam_core::compat::rand::random;
 use tracing::debug;
 use zeroize::Zeroize;
 

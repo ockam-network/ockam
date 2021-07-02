@@ -7,9 +7,10 @@ use crate::{
 
 use async_trait::async_trait;
 use ockam_core::{
-    lib::{result::Result::Ok, HashMap},
+    compat::collections::HashMap,
     Result, Routed, Worker,
 };
+use core::result::Result::Ok;
 use ockam_node::Context;
 use ockam_vault_sync_core::{Vault, VaultSync};
 
