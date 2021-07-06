@@ -3,7 +3,10 @@ use crate::xeddsa::XEddsaSigner;
 use crate::VaultError;
 use arrayref::array_ref;
 use ockam_vault_core::{Secret, SecretType, Signer, CURVE25519_SECRET_LENGTH};
+#[cfg(feature = "std")]
 use rand::{thread_rng, RngCore};
+#[cfg(feature = "no_std")]
+use ockam_core::compat::rand::{thread_rng, RngCore};
 
 impl Signer for SoftwareVault {
     /// Sign data with xeddsa algorithm. Only curve25519 is supported.

@@ -1,7 +1,7 @@
+use core::fmt::{self, Display};
 use crate::{
-    lib::{
-        fmt::{self, Display},
-        String, Vec, VecDeque,
+    compat::{
+        string::String, vec::Vec, collections::VecDeque,
     },
     Address, Result, RouteError,
 };

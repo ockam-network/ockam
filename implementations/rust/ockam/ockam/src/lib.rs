@@ -22,11 +22,8 @@ pub use ockam_node_attribute::*;
 // ---
 
 // Export node implementation
-#[cfg(all(feature = "std", feature = "ockam_node"))]
 pub use ockam_node::*;
 
-#[cfg(all(not(feature = "std"), feature = "ockam_node_no_std"))]
-pub use ockam_node_no_std::*;
 // ---
 
 mod error;
@@ -36,6 +33,7 @@ mod remote_forwarder;
 
 pub use error::*;
 pub use lease::*;
+pub use ockam_core::compat;
 pub use ockam_core::worker;
 pub use ockam_entity::*;
 pub use protocols::*;

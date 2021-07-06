@@ -1,8 +1,6 @@
+use core::fmt::{self, Display, Formatter};
 use crate::{
-    lib::{
-        fmt::{self, Display, Formatter},
-        Vec,
-    },
+    compat::vec::Vec,
     Route,
 };
 use serde::{Deserialize, Serialize};

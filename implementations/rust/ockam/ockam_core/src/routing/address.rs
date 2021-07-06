@@ -1,12 +1,24 @@
-use crate::lib::{
-    fmt::{self, Debug, Display},
-    str::from_utf8,
-    String, ToString, Vec,
+use core::fmt::{self, Debug, Display};
+use core::str::from_utf8;
+use crate::compat::{
+    string::{String, ToString},
+    vec::Vec
 };
 use core::ops::Deref;
-use rand::distributions::Standard;
-use rand::prelude::Distribution;
-use rand::Rng;
+#[cfg(feature = "std")]
+use rand::{
+    thread_rng,
+    distributions::Standard,
+    prelude::Distribution,
+    Rng
+};
+#[cfg(feature = "no_std")]
+use crate::compat::rand::{
+    thread_rng,
+    distributions::Standard,
+    prelude::Distribution,
+    Rng
+};
 use serde::{Deserialize, Serialize};
 
 /// A collection of Addresses
@@ -113,7 +125,7 @@ impl Address {
 
     /// Generate a random address with a specific type
     pub fn random(tt: u8) -> Self {
-        let mut rng = rand::thread_rng();
+        let mut rng = thread_rng();
         let address: [u8; 16] = rng.gen();
         let inner = hex::encode(address).as_bytes().into();
         Self { tt, inner }
