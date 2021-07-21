@@ -35,6 +35,7 @@ mod lease;
 mod monotonic;
 mod protocols;
 mod remote_forwarder;
+mod remote_tracer;
 
 pub use delay::*;
 pub use error::*;
@@ -43,6 +44,7 @@ pub use ockam_core::worker;
 pub use ockam_entity::*;
 pub use protocols::*;
 pub use remote_forwarder::*;
+pub use remote_tracer::*;
 
 pub mod stream;
 
